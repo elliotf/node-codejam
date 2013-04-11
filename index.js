@@ -4,14 +4,14 @@ var fs   = require('fs');
 module.exports = util;
 
 module.exports.getInput = function getInput(skip_parsing) {
-    var do_parse = !skip_parsing
+    var do_parse = !skip_parsing;
     var input = fs.readFileSync('/dev/stdin').toString().split(/\n/g);
     var output = [];
     input.forEach(function(line) {
         var line_items = [];
         line.split(/\s/g).forEach(function(e,i) {
             if (do_parse && e.match(/^\d+$/)) {
-                line_items.push(parseInt(e));
+                line_items.push(parseInt(e, 10));
             } else {
                 line_items.push(e);
             }
@@ -26,7 +26,7 @@ module.exports.getInput = function getInput(skip_parsing) {
     return output;
 };
 
-// monkey patching
+// duck punching
 Array.prototype.toHash = function arrayToHash() {
     var output = {};
     this.forEach(function(v,i) {
@@ -50,6 +50,10 @@ Array.prototype.lastTruthy = function() {
     for (var i = this.length - 1; i > -1; --i) {
         if (this[i] !== null && this[i] !== undefined) return i;
     }
+};
+
+Array.prototype.sortNum = function() {
+  return this.sort(function(a,b){ return a-b;});
 };
 
 Object.prototype.getKeys = function() {
